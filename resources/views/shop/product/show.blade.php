@@ -1,5 +1,6 @@
 @php($lang = session('lang', 'en'))
 @php($isAr = $lang === 'ar')
+@php($usdRate = 50)
 @php($productTitle = $isAr ? ($product->name_ar ?? $product->name) : ($product->name_en ?? $product->name))
 <x-shop-layouts.app :title="$productTitle">
     <x-slot name="headerActions">
@@ -439,14 +440,13 @@
             <div class="mt-4">
                 <div class="swiper" id="similar-swiper">
                     <div class="swiper-wrapper">
-                        @php($usdRate = 50)
                         @forelse(($similarProducts ?? []) as $sp)
                             @php($spFactory = ($sp->suppliers ?? collect())->firstWhere('type', 'factory'))
                             @php($spSupplier = ($sp->suppliers ?? collect())->firstWhere('type', 'vendor'))
                             @php($spFactoryPrice = (float) ($spFactory->pivot->price ?? 0))
                             @php($spSupplierPrice = (float) ($spSupplier->pivot->price ?? 0))
-                            @php($spFactoryUsd = (int) round($spFactoryPrice / $usdRate))
-                            @php($spSupplierUsd = (int) round($spSupplierPrice / $usdRate))
+                            @php($spFactoryUsd = (int) round($spFactoryPrice / ($usdRate ?: 50)))
+                            @php($spSupplierUsd = (int) round($spSupplierPrice / ($usdRate ?: 50)))
                             @php($spFactoryPriceK = $spFactoryPrice >= 1000 ? (string) round($spFactoryPrice / 1000) . 'k' : number_format($spFactoryPrice, 0, '.', ','))
                             @php($spSupplierPriceK = $spSupplierPrice >= 1000 ? (string) round($spSupplierPrice / 1000) . 'k' : number_format($spSupplierPrice, 0, '.', ','))
                             @php($spSuppliersForModal = ($sp->suppliers ?? collect())->map(fn($s) => [
