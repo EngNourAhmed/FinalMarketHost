@@ -19,8 +19,8 @@
             @php($factoryPrice = (float) ($factory->pivot->price ?? 0))
             @php($supplierPrice = (float) ($supplier->pivot->price ?? 0))
             @php($usdRate = 50)
-            @php($factoryUsd = (int) round($factoryPrice / $usdRate))
-            @php($supplierUsd = (int) round($supplierPrice / $usdRate))
+            @php($factoryUsd = (int) round($factoryPrice / ($usdRate ?: 50)))
+            @php($supplierUsd = (int) round($supplierPrice / ($usdRate ?: 50)))
             @php($factoryPriceK = $factoryPrice >= 1000 ? (string) round($factoryPrice / 1000) . 'k' : number_format($factoryPrice, 0, '.', ','))
             @php($supplierPriceK = $supplierPrice >= 1000 ? (string) round($supplierPrice / 1000) . 'k' : number_format($supplierPrice, 0, '.', ','))
             @php($suppliersForModal = ($product->suppliers ?? collect())->map(fn($s) => [
