@@ -142,6 +142,13 @@
     </style>
 
     <div class="space-y-6 text-gray-900 dark:text-slate-100 rounded-2xl p-4 md:p-6">
+        <div class="flex justify-end mb-2">
+            <a href="{{ route('customer.home') }}" class="inline-flex items-center gap-2 px-3 py-2 text-sm font-semibold rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/40 transition-colors">
+                <i data-lucide="{{ $isAr ? 'arrow-right' : 'arrow-left' }}" class="w-4 h-4"></i>
+                {{ $isAr ? 'العودة للرئيسية' : 'Back to Home' }}
+            </a>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
             <div class="lg:col-span-5">
                 <div class="rounded-2xl overflow-hidden p-">
