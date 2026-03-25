@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect root to Laravel application (internally)
+    RewriteRule ^$ public/ [L]
+
+    # Route everything else through Laravel public
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>

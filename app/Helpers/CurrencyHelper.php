@@ -30,7 +30,7 @@ class CurrencyHelper
         $country = self::getCurrentCountry();
         if (!$country) return number_format($price, 2) . ' EGP';
 
-        $convertedPrice = $price / $country->exchange_rate;
+        $convertedPrice = ($country->exchange_rate > 0) ? ($price / $country->exchange_rate) : $price;
 
         // Custom formatting logic
         if ($convertedPrice >= 1000) {
@@ -53,7 +53,7 @@ class CurrencyHelper
         $country = self::getCurrentCountry();
         if (!$country) return $price;
 
-        return $price / $country->exchange_rate;
+        return ($country->exchange_rate > 0) ? ($price / $country->exchange_rate) : $price;
     }
 
     /**

@@ -439,6 +439,7 @@
             <div class="mt-4">
                 <div class="swiper" id="similar-swiper">
                     <div class="swiper-wrapper">
+                        @php($usdRate = 50)
                         @forelse(($similarProducts ?? []) as $sp)
                             @php($spFactory = ($sp->suppliers ?? collect())->firstWhere('type', 'factory'))
                             @php($spSupplier = ($sp->suppliers ?? collect())->firstWhere('type', 'vendor'))
