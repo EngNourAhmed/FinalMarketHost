@@ -207,7 +207,7 @@
                         <a href="{{ route('shop.categories.show', $cat->slug) }}" class="flex flex-col items-center gap-2 w-full group">
                             <div class="flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-slate-100 dark:bg-slate-800 overflow-hidden transition-all duration-300 shadow-sm group-hover:shadow-md group-hover:bg-slate-200 dark:group-hover:bg-slate-700 hover:ring-2 ring-slate-300 dark:ring-slate-600 ring-offset-2 dark:ring-offset-gray-900 border border-transparent">
                                 @if (!empty($cat->image))
-                                    <img src="{{ asset('storage/' . $cat->image) }}" alt="category" class="w-full h-full object-cover pointer-events-none" />
+                                    <img src="{{ $cat->image_url }}" alt="category" class="w-full h-full object-cover pointer-events-none" />
                                 @else
                                     <i data-lucide="{{ $cat->icon ?? 'grid-2x2' }}" class="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 text-slate-700 dark:text-slate-300 transition-transform duration-300 group-hover:scale-110 pointer-events-none" stroke-width="1.5"></i>
                                 @endif
@@ -275,7 +275,7 @@
                             data-name-ar="{{ $product->name_ar ?? $product->name }}"
                             data-description-en="{{ $product->description_en ?? $product->description }}"
                             data-description-ar="{{ $product->description_ar ?? $product->description }}"
-                            data-image="{{ !empty($product->image) ? asset('storage/' . $product->image) : asset('apple-touch-icon.png') }}"
+                            data-image="{{ $product->image_url }}"
                             data-suppliers='@json($suppliersForModal)'
                             data-pricing-tiers='@json($pricingTiersForModal)'
                             data-colors="{{ $colorsStr }}"
@@ -284,7 +284,7 @@
                             <!-- Product Image Container -->
                             <div class="w-full h-24 rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 dark:bg-slate-800/60 dark:border-slate-700">
                                 @if (!empty($product->image))
-                                    <img src="{{ asset('storage/' . $product->image) }}" alt="product"
+                                    <img src="{{ $product->image_url }}" alt="product"
                                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                 @else
                                     <img src="{{ asset('apple-touch-icon.png') }}" alt="default"
@@ -407,7 +407,7 @@
                         data-product-id="{{ $product->id }}"
                         data-name-en="{{ $product->name_en ?? $product->name }}"
                         data-name-ar="{{ $product->name_ar ?? $product->name }}"
-                        data-image="{{ !empty($product->image) ? asset('storage/' . $product->image) : asset('apple-touch-icon.png') }}"
+                        data-image="{{ $product->image_url }}"
                         data-description="{{ $product->description ?? '' }}"
                         data-description-ar="{{ $product->description_ar ?? '' }}"
                         data-description-en="{{ $product->description_en ?? '' }}"
@@ -425,7 +425,7 @@
                         <div
                              class="w-full h-24 rounded-2xl overflow-hidden bg-gray-100 border border-gray-200 dark:bg-slate-800/60 dark:border-slate-700">
                             @if (!empty($product->image))
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="product"
+                                <img src="{{ $product->image_url }}" alt="product"
                                     class="w-full h-full object-cover" />
                             @else
                                 <img src="{{ asset('apple-touch-icon.png') }}" alt="default"

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ImageHelper;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
@@ -54,6 +55,22 @@ class Product extends Model
     public function updatedBy()
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    /**
+     * Get the smart image URL.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return ImageHelper::getUrl($this->image);
+    }
+
+    /**
+     * Get the gallery URLs as a collection.
+     */
+    public function getGalleryUrlsAttribute()
+    {
+        return collect($this->images ?? [])->map(fn($img) => ImageHelper::getUrl($img));
     }
 
     public function suppliers()

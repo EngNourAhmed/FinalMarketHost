@@ -5,7 +5,7 @@
                 <div class="p-4 sm:p-5 flex items-center justify-between gap-4">
                     <div class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-gray-700 flex items-center justify-center border border-gray-100 dark:border-gray-600 overflow-hidden">
                         @if(!empty($product->image))
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="product" class="w-full h-full object-cover" />
+                        <img src="{{ $product->image_url }}" alt="product" class="w-full h-full object-cover" />
                         @else
                         <img src="{{ asset('apple-touch-icon.png') }}" alt="default" class="w-full h-full object-cover" />
                         @endif
@@ -61,7 +61,7 @@
                                                 <div class="flex items-start gap-3">
                                                     <div class="w-16 h-16 rounded-2xl bg-gray-50 dark:bg-gray-700 border border-gray-100 dark:border-gray-600 overflow-hidden shrink-0">
                                                         @if(!empty($product->image))
-                                                        <img src="{{ asset('storage/' . $product->image) }}" alt="product" class="w-full h-full object-cover" />
+                                                        <img src="{{ $product->image_url }}" alt="product" class="w-full h-full object-cover" />
                                                         @else
                                                         <img src="{{ asset('apple-touch-icon.png') }}" alt="default" class="w-full h-full object-cover" />
                                                         @endif

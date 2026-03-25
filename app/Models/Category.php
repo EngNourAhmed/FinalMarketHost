@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\ImageHelper;
 
 class Category extends Model
 {
@@ -21,5 +22,13 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * Get the smart image URL.
+     */
+    public function getImageUrlAttribute(): string
+    {
+        return ImageHelper::getUrl($this->image);
     }
 }

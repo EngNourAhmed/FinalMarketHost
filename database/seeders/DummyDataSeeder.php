@@ -15,8 +15,6 @@ class DummyDataSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::beginTransaction();
-
         try {
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
@@ -26,6 +24,9 @@ class DummyDataSeeder extends Seeder
             Product::truncate();
             ProductPricingTier::truncate();
             DB::table('product_supplier_prices')->truncate();
+
+            // Start transaction AFTER DDL statements (TRUNCATE causes implicit commit in MySQL)
+            DB::beginTransaction();
 
             // ─────────────────────────────────────────
             // 1. CATEGORIES (10 categories)
@@ -152,7 +153,9 @@ class DummyDataSeeder extends Seeder
             $this->command->info('✅ Successfully seeded dummy data with real photos!');
 
         } catch (Exception $e) {
-            DB::rollBack();
+            if (DB::transactionLevel() > 0) {
+                DB::rollBack();
+            }
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
             $this->command->error('❌ Error: ' . $e->getMessage());
             Log::error($e);
