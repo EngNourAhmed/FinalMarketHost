@@ -295,6 +295,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::get('/orders/{id}/invoice', [OrderController::class, 'shopInvoice'])->name('shop.orders.invoice');
+    Route::get('/orders/{id}/pdf', [OrderController::class, 'pdf'])->name('shop.orders.pdf');
     Route::get('/orders', [OrderController::class, 'shopIndex'])->name('shop.orders.index');
     Route::get('/notifications', [ShopNotificationController::class, 'index'])->name('shop.notifications.index');
     Route::get('/cart', [CartController::class, 'shopIndex'])->name('shop.cart.index');
