@@ -230,7 +230,7 @@
                     </div>
                 </div>
                 <div class="flex-1 overflow-y-auto p-2" id="country-list">
-                    @foreach($countries as $country)
+                    @forelse($countries as $country)
                     <form action="{{ route('shop.country.set') }}" method="POST" class="country-item m-0">
                         @csrf
                         <input type="hidden" name="country_id" value="{{ $country->id }}">
@@ -245,7 +245,12 @@
                             @endif
                         </button>
                     </form>
-                    @endforeach
+                    @empty
+                    <div class="p-10 text-center text-gray-500">
+                        <i data-lucide="globe" class="w-12 h-12 mx-auto mb-3 opacity-20"></i>
+                        <p>{{ $isAr ? 'لم يتم العثور على دول' : 'No countries found' }}</p>
+                    </div>
+                    @endforelse
                 </div>
             </div>
             <!-- Bottom Navigation Bar -->

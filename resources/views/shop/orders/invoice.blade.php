@@ -157,22 +157,55 @@ document.addEventListener('DOMContentLoaded', function () {
     var btn = document.getElementById('invoice-download-pdf');
     var el = document.getElementById('invoice-print-area');
     if (!btn || !el) return;
+
     btn.addEventListener('click', function () {
+        const originalText = btn.innerHTML;
         btn.disabled = true;
-        var clone = el.cloneNode(true);
-        var footer = clone.querySelector('#invoice-footer-actions');
-        if (footer) footer.remove();
-        var opt = {
-            margin: 10,
-            filename: 'invoice-{{ $order->order_code }}.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2, useCORS: true },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-        };
-        html2pdf().set(opt).from(clone).save().then(function () {
-            btn.disabled = false;
-        }).catch(function () {
-            btn.disabled = false;
+        btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> Generating...';
+
+        // Wait for images to load before generating PDF
+        const images = el.getElementsByTagName('img');
+        const imagePromises = Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+        });
+
+        Promise.all(imagePromises).then(() => {
+            var clone = el.cloneNode(true);
+            
+            // Remove actions and any other unwanted elements from clone
+            const actions = clone.querySelector('#invoice-footer-actions');
+            if (actions) actions.remove();
+
+            // Set background to white for the clone to ensure visibility in PDF
+            clone.style.background = 'white';
+            clone.classList.remove('dark:bg-slate-900');
+            
+            const opt = {
+                margin: [10, 10],
+                filename: 'invoice-{{ $order->order_code }}.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2, 
+                    useCORS: true,
+                    logging: false,
+                    letterRendering: true
+                },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(clone).save().then(function () {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }).catch(function (err) {
+                console.error('PDF Generation Error:', err);
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                alert('Failed to generate PDF. Please try printing to PDF instead.');
+            });
         });
     });
 });
