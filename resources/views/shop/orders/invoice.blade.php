@@ -141,74 +141,13 @@
                     <i data-lucide="printer" class="w-4 h-4"></i>
                     {{ __('Print Invoice') }}
                 </button>
-                <button type="button" id="invoice-download-pdf" class="px-5 py-2.5 rounded-xl bg-rose-600 text-white hover:bg-rose-700 font-medium transition flex items-center gap-2">
+                <a href="{{ route('shop.orders.pdf', $order->id) }}" class="px-5 py-2.5 rounded-xl bg-rose-600 text-white hover:bg-rose-700 font-medium transition flex items-center gap-2">
                     <i data-lucide="file-down" class="w-4 h-4"></i>
                     {{ __('Download PDF') }}
-                </button>
+                </a>
             </div>
         </div>
     </div>
 </div>
 
-@push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    var btn = document.getElementById('invoice-download-pdf');
-    var el = document.getElementById('invoice-print-area');
-    if (!btn || !el) return;
-
-    btn.addEventListener('click', function () {
-        const originalText = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> Generating...';
-
-        // Wait for images to load before generating PDF
-        const images = el.getElementsByTagName('img');
-        const imagePromises = Array.from(images).map(img => {
-            if (img.complete) return Promise.resolve();
-            return new Promise(resolve => {
-                img.onload = resolve;
-                img.onerror = resolve;
-            });
-        });
-
-        Promise.all(imagePromises).then(() => {
-            var clone = el.cloneNode(true);
-            
-            // Remove actions and any other unwanted elements from clone
-            const actions = clone.querySelector('#invoice-footer-actions');
-            if (actions) actions.remove();
-
-            // Set background to white for the clone to ensure visibility in PDF
-            clone.style.background = 'white';
-            clone.classList.remove('dark:bg-slate-900');
-            
-            const opt = {
-                margin: [10, 10],
-                filename: 'invoice-{{ $order->order_code }}.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
-                    scale: 2, 
-                    useCORS: true,
-                    logging: false,
-                    letterRendering: true
-                },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(clone).save().then(function () {
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-            }).catch(function (err) {
-                console.error('PDF Generation Error:', err);
-                btn.disabled = false;
-                btn.innerHTML = originalText;
-                alert('Failed to generate PDF. Please try printing to PDF instead.');
-            });
-        });
-    });
-});
-</script>
-@endpush
 @endsection

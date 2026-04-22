@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrderController extends Controller
 {
@@ -612,9 +613,23 @@ class OrderController extends Controller
 
     public function pdf($id)
     {
-        $order = Order::with(['customer', 'invoice', 'shipping'])->findOrFail($id);
+        $user = Auth::user();
+        if (! $user) {
+            abort(403);
+        }
 
-        return response()->json(['message' => 'PDF generation not implemented', 'data' => $order]);
+        $customer = Customer::query()->where('email', (string) ($user->email ?? ''))->first();
+        if (! $customer) {
+            abort(404);
+        }
+
+        $order = Order::where('customer_id', $customer->id)
+            ->with(['items.product', 'shipping'])
+            ->findOrFail($id);
+
+        $pdf = Pdf::loadView('shop.orders.pdf', compact('order'));
+        
+        return $pdf->download('invoice-' . $order->order_code . '.pdf');
     }
 
     public function excel($id)
